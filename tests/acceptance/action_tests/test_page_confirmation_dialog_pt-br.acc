@@ -1,0 +1,34 @@
+Como um usuário do Pyccuracy
+Eu quero testar a ação de validar de caixas de confirmação
+Para garantir que o Pyccuracy funciona em outras línguas
+
+
+Scenario 1 - Confirmando uma mensagem originada de um botão
+Given
+    Eu navego para "confirmation_dialog_tests.htm"
+When
+    Eu clico no botão "btnConfirmation1"
+Then
+    Eu confirmo a mensagem "Are you sure about it?"
+
+Scenario 2 - Confirmando a mensagem contendo caracteres especiais e executando demais ações que seriam bloqueadas se não houvesse a confirmação
+Given
+    Eu navego para "confirmation_dialog_tests.htm"
+When
+    Eu clico no botão "btnConfirmation2"
+	Eu confirmo a mensagem "Você deseja a exclusão do registro?"
+Then
+	Eu navego para "http://www.google.com"
+	Eu espero a página ser carregada por 10 segundos
+	E eu preencho a caixa de texto "q" com "It works"
+	
+Scenario 3 - Confirmando uma mensagem de um botão submit
+Given
+    Eu navego para "confirmation_dialog_tests.htm"
+When
+    Eu clico no botão "q"
+	Eu confirmo a mensagem "Do you want to go to Google Home Page?"
+	E eu espero a página ser carregada por 10 segundos
+Then
+	E eu preencho a caixa de texto "q" com "It works"
+	Eu vejo o título "Pyccuracy - Google Search"

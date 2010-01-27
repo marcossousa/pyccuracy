@@ -1,0 +1,33 @@
+As a Pyccuracy User
+I want to test the built-in browser confirmation dialog
+So that I can make sure Pyccuracy works
+
+Scenario 1 - Confirme message from input button click
+Given
+    I go to "confirmation_dialog_tests.htm"
+When
+    I click "btnConfirmation1" button
+Then
+    I confirm the message "Are you sure about it?"
+
+Scenario 2 - Confirming a message from a button and try next operations
+Given
+    I go to "confirmation_dialog_tests.htm"
+When
+    I click "btnConfirmation2" button
+	I confirm the message "Você deseja a exclusão do registro?"
+Then
+	I go to "http://www.google.com"
+	I wait for the page to load for 10 seconds
+	And I fill "q" textbox with "It works"
+	
+Scenario 3 - Confirming a message from a submitting button to another page
+Given
+    I go to "confirmation_dialog_tests.htm"
+When
+    I click "q" button
+	I confirm the message "Do you want to go to Google Home Page?"
+	And I wait for the page to load for 10 seconds
+Then
+	I fill "q" textbox with "It works"
+	And I see "Pyccuracy - Google Search" title

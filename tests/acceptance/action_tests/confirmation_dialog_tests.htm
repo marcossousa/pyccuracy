@@ -1,0 +1,15 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>Pyccuracy Tests - Confirmation Dialogs</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    </head>
+    <body>
+        <form action="http://www.google.com/search" method="GET">
+			<input type="button" id="btnConfirmation1" value="Do Something" onclick="confirm('Are you sure about it?')"/>
+			<!-- the following button uses special characters -->
+	        <button name="btnConfirmation2" onclick="confirm('Voc&ecirc; deseja a exclus&atilde;o do registro?');return false">Something</button>
+            <input type="submit" name="q" value="Pyccuracy" onclick="return confirm('Do you want to go to Google Home Page?')"></input>
+        </form>
+    </body>
+</html>

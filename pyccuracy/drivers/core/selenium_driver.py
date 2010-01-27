@@ -254,4 +254,6 @@ class SeleniumDriver(BaseDriver):
 
     def radio_uncheck(self, radio_selector):
         self.selenium.uncheck(radio_selector)
-        
+
+    def get_confirmation(self):
+        return self.selenium.get_confirmation()

@@ -122,3 +122,15 @@ class PageWaitForSecondsAction(ActionBase):
 
         time.sleep(timeout)
 
+
+class PageConfirmMessageAction(ActionBase):
+	regex = LanguageItem("page_wait_for_confirmation")
+	
+	def execute(self, context, message):
+		try:
+			actual_message = context.browser_driver.get_confirmation()
+			if (actual_message != message):
+				msg = context.language.format("page_wait_for_confirmation_failure", actual_message, message)
+				raise self.failed(msg)
+		except ValueError:
+			raise self.failed("The is no confirmation in the page")
