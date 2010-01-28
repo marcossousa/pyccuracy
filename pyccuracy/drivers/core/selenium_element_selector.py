@@ -25,7 +25,13 @@ class SeleniumElementSelector(object):
         return method(element_name)
 
     @staticmethod
+    def is_xpath_name(element_name):
+        return element_name.startswith("//")
+
+    @staticmethod
     def generic(element_name):
+        if  SeleniumElementSelector.is_xpath_name:
+        	return element_name
         '''
         Returns a xpath that matches a generic element
         '''
@@ -33,6 +39,8 @@ class SeleniumElementSelector(object):
 
     @staticmethod
     def button(element_name):
+        if  SeleniumElementSelector.is_xpath_name:
+        	return element_name
         '''
         Returns a regular expression that matches input type="button", input type="submit" or button tags with
         the specified argument as id or name.
@@ -41,6 +49,8 @@ class SeleniumElementSelector(object):
 
     @staticmethod
     def radio_button(element_name):
+        if  SeleniumElementSelector.is_xpath_name:
+        	return element_name
         '''
         Returns a regular expression that matches input type="radio" with the specified argument as id or name.
         '''
@@ -48,6 +58,8 @@ class SeleniumElementSelector(object):
 
     @staticmethod
     def div(element_name):
+        if  SeleniumElementSelector.is_xpath_name:
+        	return element_name
         '''
         Returns a regular expression that matches div tags with
         the specified argument as id or name.
@@ -56,6 +68,8 @@ class SeleniumElementSelector(object):
 
     @staticmethod
     def link(element_name):
+        if  SeleniumElementSelector.is_xpath_name:
+        	return element_name
         '''
         Returns a regular expression that matches link(a) tags with
         the specified argument as id or name.
@@ -64,6 +78,8 @@ class SeleniumElementSelector(object):
 
     @staticmethod
     def checkbox(element_name):
+        if  SeleniumElementSelector.is_xpath_name:
+        	return element_name
         '''
         Returns a regular expression that matches input type="checkbox" tags with
         the specified argument as id or name.
@@ -72,6 +88,8 @@ class SeleniumElementSelector(object):
 
     @staticmethod
     def select(element_name):
+        if  SeleniumElementSelector.is_xpath_name:
+        	return element_name
         '''
         Returns a regular expression that matches Select tags with
         the specified argument as id or name.
@@ -80,6 +98,8 @@ class SeleniumElementSelector(object):
 
     @staticmethod
     def textbox(element_name):
+        if  SeleniumElementSelector.is_xpath_name:
+        	return element_name
         '''
         Returns a regular expression that matches input type="text", input without type attribute or textarea tags with
         the specified argument as id or name.
@@ -88,6 +108,8 @@ class SeleniumElementSelector(object):
 
     @staticmethod
     def image(element_name):
+        if  SeleniumElementSelector.is_xpath_name:
+        	return element_name
         '''
         Returns a regular expression that matches img tags with
         the specified argument as id or name.

@@ -15,10 +15,13 @@
 from pyccuracy.page import PageRegistry, Page
 from pyccuracy.actions import ActionBase
 from pyccuracy.languages import LanguageItem
+from pyccuracy.drivers.core.selenium_element_selector import SeleniumElementSelector
 
 def resolve_element_key(context, element_type, element_name, resolve_function):
     element_type = element_type.encode("utf-8")
     resolved = resolve_function(context, element_type, element_name)
+    if SeleniumElementSelector.is_xpath_name:
+        return element_name	
     if resolved:
         return resolved
 

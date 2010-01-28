@@ -20,6 +20,7 @@ import re
 
 from pyccuracy.errors import ActionFailedError, LanguageDoesNotResolveError
 from pyccuracy.languages import LanguageItem, AVAILABLE_GETTERS, LanguageGetter
+from pyccuracy.drivers.core.selenium_element_selector import SeleniumElementSelector
 
 ACTIONS = []
 
@@ -116,6 +117,10 @@ class ActionBase(object):
         if not resolved_element:
             resolved_element = context.browser_driver.resolve_element_key(context, element_type, element_key)
 
+
+        if not resolved_element and SeleniumElementSelector.is_xpath_name:
+            resolved_element = element_key
+		
         if not resolved_element:
             raise KeyError("No element could be resolved for element type %s and element key %s" % (element_type, element_key))
 

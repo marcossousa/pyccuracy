@@ -1,0 +1,87 @@
+As a Pyccuracy User
+I want to test the main actions using xpath notation
+So that I can make sure Pyccuracy works
+
+Scenario 1 - Check div, paragraph and unordered lines by xpath
+Given
+	I go to "xpath_page_tests.htm"
+When
+	#The page finishes loading
+Then
+	# Check div's contents
+	I see "//table/tbody/tr/td/form/table/tbody/tr/td/div" div
+	I see "//table/tbody/tr/td/form/table/tbody/tr/td/div" div contains "<p>contains something</p>" markup
+	I see "//table/tbody/tr/td/form/table/tbody/tr/td/div" div contains "contains something"
+	# Check UL and LI items
+	I see "//ul" ul
+	I see "//li" li
+	# Paragraph's check
+	I see "//td/p" paragraph
+
+Scenario 2 - Checking that a given checkbox gets checked and verify a checked checkbox by xpath notation
+Given
+	I go to "xpath_page_tests.htm"
+When
+	I check the "//input[@type='checkbox']" checkbox
+Then
+	I see the "//input[@type='checkbox']" checkbox is checked
+	And I see the "//input[@type='checkbox'][1]" checkbox is checked
+
+Scenario 3 - Checking that we can click an image by xpath notation
+Given
+    I go to "xpath_page_tests.htm"
+When
+    I click "//img" image
+Then
+    I see "It Works!" title
+
+Scenario 4 - Checking that we can click a link by xpath notation
+Given
+	I go to "xpath_page_tests.htm"
+When
+	I click "//a[contains(text(),'Click me')]" link and wait
+Then
+	I see "It Works!" title
+	
+Scenario 5 - Checking that we can click a button by xpath notation
+Given
+	I go to "xpath_page_tests.htm"
+When
+	I click "//button[@type='submit']" link and wait
+Then
+	I see "It Works!" title
+	
+Scenario 6 - Checking that a given radiobox gets checked and verify a checked radiobox by xpath notation
+Given
+	I go to "xpath_page_tests.htm"
+When
+	I check the "//input[@type='radio']" radio
+Then
+	I see the "//input[@type='radio']" radio is checked
+	And I see the "//input[@type='radio'][1]" radio is checked
+	
+Scenario 7 - Changing the selected index of a select by xpath notation
+Given
+	I go to "xpath_page_tests.htm"
+When
+	I select the option with index of 1 in "//select" select
+Then
+	I see "//select" select has selected index of 1
+	
+Scenario 8 - Filling diferents textboxes by xpath notation
+Given
+	I go to "xpath_page_tests.htm"
+When
+	I fill "//tr[9]/td/input" textbox with "Some text"
+	And I fill "//tr[10]/td/input" textbox with "Some other text"
+Then
+	I see "//tr[9]/td/input" textbox matches "Some text"
+	And I see "//tr[10]/td/input" textbox matches "Some other text"
+	
+Scenario 9 - Filling textarea by xpath notation
+Given
+	I go to "xpath_page_tests.htm"
+When
+	I fill "//textarea" textbox with "Some text"
+Then
+	I see "//textarea" textbox matches "Some text"	

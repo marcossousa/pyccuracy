@@ -1,0 +1,87 @@
+Como um usuário do Pyccuracy
+Eu quero testar as principais ações usando notações xpath
+Para garantir que o Pyccuracy funciona em outras línguas
+
+Cenário 1 - Verifica o funcionamento de div, paragraph and marcadores com xpath
+Dado que
+ 	Eu navego para "xpath_page_tests.htm"
+Quando
+	#The page finishes loading
+Então
+	# Check div's contents
+	Eu vejo o div "//table/tbody/tr/td/form/table/tbody/tr/td/div"
+	Eu vejo que o div "//table/tbody/tr/td/form/table/tbody/tr/td/div" contém exatamente o markup "<p>contains something</p>"
+	Eu vejo que o div "//table/tbody/tr/td/form/table/tbody/tr/td/div" contém "contains something"
+	# Check UL and LI items
+	Eu vejo a ul "//ul"
+	Eu vejo a li "//li"
+	# Paragraph's check
+	E eu vejo o parágrafo "//td/p"
+
+Cenário 2 - Verificando a marcação de checkbox e validação de ckeckbox marcados
+Dado que
+	Eu navego para "xpath_page_tests.htm"
+Quando
+	Eu marco a checkbox "//input[@type='checkbox']"
+Então
+	Eu vejo que a checkbox "//input[@type='checkbox']" está marcada
+	E eu vejo que a checkbox "//input[@type='checkbox'][1]" está marcada
+
+Cenário 3 - Validando o clique em imagens através de xpath
+Dado que
+    Eu navego para "xpath_page_tests.htm"
+Quando
+    Eu clico na imagem "//img"
+Então
+    Eu vejo o título "It Works!"
+
+Cenário 4 - Validando o clique em links através de xpath
+Dado que
+	Eu navego para "xpath_page_tests.htm"
+Quando
+	Eu clico no link "//a[contains(text(),'Click me')]" e espero
+Então
+	Eu vejo o título "It Works!"
+	
+Cenário 5 - Validando o clique em botões através de xpath
+Dado que
+	Eu navego para "xpath_page_tests.htm"
+Quando
+	Eu clico no botão "//button[@type='submit']" e espero
+Então
+	Eu vejo o título "It Works!"
+	
+Cenário 6 - Verificando a marcação de radio e validação de radio marcados
+Dado que
+	Eu navego para "xpath_page_tests.htm"
+Quando
+	Eu marco a radio "//input[@type='radio']"
+Então
+	Eu vejo que a radio "//input[@type='radio']" está marcada
+	E eu vejo que a radio "//input[@type='radio'][1]" está marcada
+	
+Cenário 7 - Validando a manipulação de combobox via xpath
+Dado que
+	Eu navego para "xpath_page_tests.htm"
+Quando
+	Eu seleciono o item com índice 1 na select "//select"
+Então
+	Eu vejo que o índice selecionado da select "//select" é 1
+	
+Cenário 8 - Preenchendo caixas de texto usando xpath
+Dado que
+	Eu navego para "xpath_page_tests.htm"
+Quando
+	Eu preencho a caixa de texto "//tr[9]/td/input" com "Some text"
+	E eu preencho a caixa de texto "//tr[10]/td/input" com "Some other text"
+Então
+	Eu vejo que a caixa de texto "//tr[9]/td/input" contém exatamente "Some text"
+	E eu vejo que a caixa de texto "//tr[10]/td/input" contém exatamente "Some other text"
+	
+Cenário 9 - Preenchendo text-area com xpath
+Dado que
+	Eu navego para "xpath_page_tests.htm"
+Quando
+	E eu preencho a caixa de texto "//textarea" com "Some other text"
+Então
+	E eu vejo que a caixa de texto "//textarea" contém exatamente "Some other text"
