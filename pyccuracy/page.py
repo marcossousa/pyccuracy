@@ -18,13 +18,21 @@
 
 from os.path import abspath, exists
 from urlparse import urljoin
-from lxml import cssselect
+lxml_available = True
+try:
+    from lxml import cssselect
+except ImportError:
+    lxml_available = False
 from pyccuracy.common import Settings, URLChecker
 
 NAME_DICT = {}
 URL_DICT = {}
+ALL_PAGES = []
 
 class InvalidUrlError(Exception):
+    pass
+
+class ElementAlreadyRegisteredError(Exception):
     pass
 
 class MetaPage(type):
@@ -43,7 +51,8 @@ class MetaPage(type):
                 URL_DICT[url].insert(0, cls)
             else:
                 URL_DICT[url] = [cls]
-
+            
+            ALL_PAGES.append(cls)
 
         super(MetaPage, cls).__init__(name, bases, attrs)
 
@@ -78,6 +87,8 @@ class PageRegistry(object):
                 return None
 
         klass_object = cls.get_by_name(url) or cls.get_by_url(url)
+        if klass_object:
+            url = klass_object.url
 
         url_pieces = []
 
@@ -121,8 +132,10 @@ class PageRegistry(object):
         return URL_DICT.get(url)
 
 class Page(object):
-    __metaclass__ = MetaPage
     '''Class that defines a page model.'''
+    __metaclass__ = MetaPage
+
+    got_element_event_handlers = []
 
     Button = "button"
     Checkbox = "checkbox"
@@ -133,6 +146,7 @@ class Page(object):
     RadioButton = "radio_button"
     Select = "select"
     Textbox = "textbox"
+    Table = "table"
     Element = '*'
 
     def __init__(self):
@@ -141,15 +155,34 @@ class Page(object):
         if hasattr(self, "register"):
             self.register()
 
+    @classmethod
+    def all(cls):
+        return ALL_PAGES
+
+    @classmethod
+    def subscribe_to_got_element(cls, subscriber):
+        cls.got_element_event_handlers.append(subscriber)
+
+    def fire_got_element(self, element_key, resolved_key):
+        for subscriber in self.got_element_event_handlers:
+            subscriber(self, element_key, resolved_key)
+
     def get_registered_element(self, element_key):
         if not self.registered_elements.has_key(element_key):
             return None
-        return self.registered_elements[element_key]
+        resolved_key = self.registered_elements[element_key]
+        self.fire_got_element(element_key, resolved_key)
+        return resolved_key
 
     def register_element(self, element_key, element_locator):
+        if self.registered_elements.has_key(element_key) and self.get_registered_element(element_key) != element_locator:
+            error_message = "You are trying to register an element with name '%s' in %s with locator '%s', but it is already registered with a different locator ('%s')." % (element_key, self.__class__, element_locator, self.get_registered_element(element_key))
+            raise ElementAlreadyRegisteredError(error_message)
         self.registered_elements[element_key] = element_locator
 
     def quick_register(self, element_key, element_selector):
+        if not lxml_available:
+            raise RuntimeError("You can't use CSS selectors unless you install lxml. Installing it is pretty easy. Check our docs at http://www.pyccuracy.org to know more.")
         selector = cssselect.CSSSelector(element_selector)
         xpath = selector.path.replace("descendant-or-self::", "//")
         self.register_element(element_key, xpath)

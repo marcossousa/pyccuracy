@@ -19,7 +19,11 @@
 import time
 from traceback import format_exc
 
-from selenium import *
+selenium_available = True
+try:
+    from selenium import *
+except ImportError:
+    selenium_available = False
 
 from pyccuracy.drivers import BaseDriver, DriverError
 from selenium_element_selector import *
@@ -32,6 +36,9 @@ class SeleniumDriver(BaseDriver):
         self.selenium = selenium
 
     def start_test(self, url=None):
+        if not selenium_available:
+            raise RuntimeError('You *MUST* have selenium installed to use the selenium browser driver')
+
         if not url:
             url = self.context.settings.base_url
         self.start_selenium(url)
@@ -257,3 +264,30 @@ class SeleniumDriver(BaseDriver):
 
     def get_confirmation(self):
         return self.selenium.get_confirmation()
+        
+    def get_table_rows(self, table_selector):
+        rows = []
+        row_count = int(self.get_xpath_count(table_selector + "/tbody/tr"))
+        
+        for row_index in range(row_count):
+            row = []
+            cell_count = int(self.get_xpath_count(table_selector + 
+                                                "/tbody/tr[%d]/td" % \
+                                                (row_index + 1)))
+            for cell_index in range(cell_count):
+                cell = self.selenium.get_table(table_selector + '.%d.%d' % (
+                                                row_index,
+                                                cell_index
+                                              ))
+                row.append(cell)
+            rows.append(row)
+
+        return rows
+    
+    def __str__(self):
+        return self.__unicode__()
+    
+    def __unicode__(self):
+        return "SeleniumDriver at '%s:%s' using '%s' browser." % (self.context.settings.extra_args.get("selenium.server", "localhost"),
+                self.context.settings.extra_args.get("selenium.port", 4444),
+                self.context.settings.browser_to_run)

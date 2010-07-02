@@ -19,7 +19,7 @@ scenarios_ran_successfully = %d cenários tiveram sucesso (%.2f%%)
 scenarios_that_failed = %d cenários falharam (%.2f%%)
 
 #Supported elements
-supported_elements = botão|radio|div|link|checkbox|select|caixa de texto|imagem|elemento|parágrafo|ul|li
+supported_elements = botão|radio|div|link|checkbox|select|caixa de texto|imagem|elemento|parágrafo|ul|li|tabela
 botão_category = button
 checkbox_category = checkbox
 div_category = div
@@ -28,6 +28,7 @@ link_category = link
 page_category = page
 radio_category = radio_button
 select_category = select
+tabela_category = table
 caixa de texto_category = textbox
 parágrafo_category = paragraph
 ul_category = ul
@@ -41,10 +42,10 @@ test_run_timing = Duração dos Testes
 scenario_starter_regex = ^Cenário (\d+) - (.+)$
 
 #Regular Expressions de Acoes
-page_go_to_regex = ^(E )?[eE]u navego para (?P<url>[\"]([\w:/._-]+)[\"]|([\w\s_.-]+))$
-page_am_in_regex = ^(E )?[eE]u estou n[oa] (?P<url>[\"]([\w:/._-]+)[\"]|([\w\s_.-]+))$
+page_go_to_regex = ^(E )?[eE]u navego para (?P<url>[\"](([\w:/._-]|\=|\?|\&|\"|\;|\%)+)[\"]|([\w\s_.-]+))$
+page_am_in_regex = ^(E )?[eE]u estou n[oa] (?P<url>[\"](([\w:/._-]|\=|\?|\&|\"|\;|\%)+)[\"]|([\w\s_.-]+))$
 page_see_title_regex = ^(E )?[eE]u vejo o título [\"](?P<title>.+)[\"]$
-page_wait_for_page_to_load_regex = ^(E )?[eE]u espero a página ser carregada(?P<timeout> por (\d+) segundos)?$
+page_wait_for_page_to_load_regex = ^(E )?[eE]u espero a página ser carregada( por (?P<timeout>\d+) segundos)?$
 page_wait_for_seconds_regex = ^(E )?[eE]u espero por (?P<timeout>\d+([.]\d+)?) segundo[s]?$
 page_check_contains_markup_regex = ^(E )?[eE]u vejo que a página atual contém [\"\'](?P<expected_markup>.+)[\'\"]$
 page_check_does_not_contain_markup_regex = ^(E )?[eE]u vejo que a página atual não contém [\"\'](?P<expected_markup>.+)[\'\"]$
@@ -88,7 +89,6 @@ image_has_src_regex = ^(E )?[eE]u vejo que a imagem [\"](?P<image_name>.+)[\"] t
 image_does_not_have_src_regex = ^(E )?[eE]u vejo que a imagem [\"](?P<image_name>.+)[\"] não tem src de [\"](?P<src>.+)[\"]$
 
 link_has_href_regex = ^(E )?[eE]u vejo que o link [\"](?P<link_name>.+)[\"] tem href [\"](?P<href>.+)[\"]$
-link_has_text_regex = ^(E )?[eE]u vejo que o link [\"](?P<link_name>.+)[\"] tem texto [\"](?P<text>.+)[\"]$
 
 select_contains_option_with_text_regex = ^(E )?[eE]u vejo que a select [\"](?P<select_name>.+)[\"] contém uma opção com texto [\"](?P<text>.+)[\"]$
 select_does_not_contain_option_with_text_regex = ^(E )?[eE]u vejo que a select [\"](?P<select_name>.+)[\"] não contém uma opção com texto [\"](?P<text>.+)[\"]$
@@ -104,13 +104,11 @@ select_does_not_have_selected_text_regex = ^(E )?[eE]u vejo que o texto selecion
 
 textbox_type_regex = ^(E )?[eE]u preencho a caixa de texto [\"](?P<textbox_name>.+)[\"] com [\"](?P<text>.+)[\"]$
 textbox_type_keys_regex = ^(E )?[eE]u preencho lentamente a caixa de texto [\"](?P<textbox_name>.+)[\"] com [\"](?P<text>.+)[\"]$
-textbox_contains_text_regex = ^(E )?[eE]u vejo que a caixa de texto [\"](.+)[\"] contém [\"](.+)[\"]$
-textbox_does_not_contain_text_regex = ^(E )?[eE]u vejo que a caixa de texto [\"](.+)[\"] não contém [\"](.+)[\"]$
-textbox_matches_text_regex = ^(E )?[eE]u vejo que a caixa de texto [\"](.+)[\"] contém exatamente [\"](.+)[\"]$
-textbox_does_not_match_text_regex = ^(E )?[eE]u vejo que a caixa de texto [\"](.+)[\"] não contém exatamente [\"](.+)[\"]$
 textbox_is_empty_regex = ^(E )?[eE]u vejo que a caixa de texto [\"](?P<textbox_name>.+)[\"] está vazia$
 textbox_is_not_empty_regex = ^(E )?[eE]u vejo que a caixa de texto [\"](?P<textbox_name>.+)[\"] não está vazia$
 textbox_clean_regex = ^(E )?[eE]u limpo a caixa de texto [\"](?P<textbox_name>.+)[\"]$
+
+table_match_regex = ^(E )?[eE]u vejo a tabela [\"](?P<table_name>.+)[\"] como:$
 
 #Action Failure Messages
 page_go_to_failure = A url "%s" não é válida. Você esqueceu de usar o parâmetro -u (ou --url) ?
@@ -149,12 +147,10 @@ element_does_not_match_text_failure = O %s com nome ou id %s não deveria conter
 element_matches_markup_failure = O %s com nome ou id %s deveria conter exatamente o markup "%s", mas o seu markup atual é "%s".
 element_does_not_match_markup_failure = O %s com nome ou id %s não deveria conter exatamente o markup "%s", mas o seu markup atual é "%s".
 
-
 image_has_src_failure = A imagem com nome ou id %s deveria ter src de "%s", mas tem "%s".
 image_does_not_have_src_failure = A imagem com nome ou id %s não deveria ter src de "%s", mas tem "%s".
 
 link_has_href_failure = O link com nome ou id %s deveria ter href "%s", mas tem "%s".
-link_has_text_failure = O link com nome ou id %s deveria ter texto "%s", mas tem "%s".
 
 radio_button_more_than_one_element_returned_failure = Mais de um elemento foi retornado para o elemento de nome %s (resolvido para %s). %s elementos foram encontrados.
 radio_is_checked_failure = O radio button com nome ou id %s está desmarcado e deveria estar marcado.
@@ -172,12 +168,10 @@ select_option_by_index_failure = A opção da select %s com índice de %d não f
 select_option_by_value_failure = A opção da select %s com valor de "%s" não foi encontrada ou não pode ser selecionada.
 select_option_by_text_failure = A opção da select %s com texto de "%s" não foi encontrada ou não pode ser selecionada.
 
-textbox_contains_text_failure = A caixa de texto com nome ou id %s deveria conter "%s", mas o seu texto atual é "%s".
-textbox_does_not_contain_text_failure = A caixa de texto com nome ou id %s não deveria conter "%s", mas o seu texto atual é "%s".
-textbox_matches_text_failure = A caixa de texto com nome ou id %s deveria conter exatamente "%s", mas o seu texto atual é "%s".
-textbox_does_not_match_text_failure = A caixa de texto com nome ou id %s não deveria conter exatamente "%s", mas o seu texto atual é "%s".
 textbox_is_empty_failure = A caixa de texto com nome ou id %s não está vazia e deveria estar.
 textbox_is_not_empty_failure = A caixa de texto com nome ou id %s está vazia e não deveria estar.
+
+table_invalid_data_failure = A tabela com nome ou id '%s' deveria ter a estrutura \n%s\n%s mas teve \n%s.
 
 timeout_failure = A ação de esperar a página carregar não foi executada com sucesso após um timeout de %d milisegundos.
 

@@ -12,7 +12,7 @@ files_without_header = test files without the proper header
 story_status = Story Status
 
 #Supported elements
-supported_elements = button|radio button|div|link|checkbox|select|textbox|image|element|paragraph|ul|li
+supported_elements = button|radio button|div|link|checkbox|select|textbox|image|element|paragraph|ul|li|table
 button_category = button
 checkbox_category = checkbox
 div_category = div
@@ -22,6 +22,7 @@ page_category = page
 radio button_category = radio_button
 select_category = select
 textbox_category = textbox
+table_category = table
 paragraph_category = paragraph
 ul_category = ul
 li_category = li
@@ -41,11 +42,11 @@ test_run_timing = Test Run Timings
 scenario_starter_regex = ^Scenario (\d+) - (.+)$
 
 #Actions Regular Expressions
-page_go_to_regex = ^(And )?I go to (?P<url>[\"]([\w:/._-]+)[\"]|([\w\s_.-]+))$
-page_am_in_regex = ^(And )?I am in the (?P<url>[\"]([\w:/._-]+)[\"]|([\w\s_.-]+))$
+page_go_to_regex = ^(And )?I go to (?P<url>[\"](([\w:/._-]|\=|\?|\&|\"|\;|\%)+)[\"]|([\w\s_.-]+))$
+page_am_in_regex = ^(And )?I am in the (?P<url>[\"](([\w:/._-]|\=|\?|\&|\"|\;|\%)+)[\"]|([\w\s_.-]+))$
 page_see_title_regex = ^(And )?I see [\"](?P<title>.+)[\"] title$
 page_wait_for_page_to_load_regex = ^(And )?I wait for the page to load( for (?P<timeout>\d+) seconds)?$
-page_wait_for_seconds_regex = ^(And )?I wait for (?P<timeout>\d+([.]d+)?) second[s]?$
+page_wait_for_seconds_regex = ^(And )?I wait for (?P<timeout>\d+([.]\d+)?) second[s]?$
 page_check_contains_markup_regex = ^(And )?I see that current page contains [\"\'](?P<expected_markup>.+)[\'\"]$
 page_check_does_not_contain_markup_regex = ^(And )?I see that current page does not contain [\"\'](?P<expected_markup>.+)[\'\"]$
 page_wait_for_confirmation=^(And )?I confirm the message [\"\'](?P<message>.+)[\'\"]$
@@ -88,7 +89,6 @@ image_has_src_regex = ^(And )?I see [\"](?P<image_name>.+)[\"] image has src of 
 image_does_not_have_src_regex = ^(And )?I see [\"](?P<image_name>.+)[\"] image does not have src of [\"](?P<src>.+)[\"]$
 
 link_has_href_regex = ^(And )?I see [\"](?P<link_name>.+)[\"] link has [\"](?P<href>.+)[\"] href$
-link_has_text_regex = ^(And )?I see [\"](?P<link_name>.+)[\"] link has [\"](?P<text>.+)[\"] text$
 
 select_contains_option_with_text_regex = ^(And )?I see [\"](?P<select_name>.+)[\"] select contains an option with text [\"](?P<text>.+)[\"]$
 select_does_not_contain_option_with_text_regex = ^(And )?I see [\"](?P<select_name>.+)[\"] select does not contain an option with text [\"](?P<text>.+)[\"]$
@@ -104,13 +104,11 @@ select_does_not_have_selected_text_regex = ^(And )?I see [\"](?P<select_name>.+)
 
 textbox_type_regex = ^(And )?I fill [\"](?P<textbox_name>.+)[\"] textbox with [\"](?P<text>.+)[\"]$
 textbox_type_keys_regex = ^(And )?I slowly fill [\"](?P<textbox_name>.+)[\"] textbox with [\"](?P<text>.+)[\"]$
-textbox_contains_text_regex = ^(And )?I see [\"](.+)[\"] textbox contains [\"](.+)[\"]$
-textbox_does_not_contain_text_regex = ^(And )?I see [\"](.+)[\"] textbox does not contain [\"](.+)[\"]$
-textbox_matches_text_regex = ^(And )?I see [\"](.+)[\"] textbox matches [\"](.+)[\"]$
-textbox_does_not_match_text_regex = ^(And )?I see [\"](.+)[\"] textbox does not match [\"](.+)[\"]$
 textbox_is_empty_regex = ^(And )?I see [\"](?P<textbox_name>.+)[\"] textbox is empty$
 textbox_is_not_empty_regex = ^(And )?I see [\"](?P<textbox_name>.+)[\"] textbox is not empty$
 textbox_clean_regex = ^(And )?I clean [\"](?P<textbox_name>.+)[\"] textbox$
+
+table_match_regex = ^(And )?I see [\"](?P<table_name>.+)[\"] table as:$
 
 #Action Failure Messages
 page_go_to_failure = The url "%s" is not valid. Did you forget to use the -u (or --url) parameter ?
@@ -154,7 +152,6 @@ image_has_src_failure = The image with name or id %s should have "%s" as src, bu
 image_does_not_have_src_failure = The image with name or id %s should not have "%s" as src, but has "%s".
 
 link_has_href_failure = The link with name or id %s should have "%s" as href, but has "%s".
-link_has_text_failure = The link with name or id %s should have "%s" as text, but has "%s".
 
 radio_button_more_than_one_element_returned_failure = More than one element was returned for the element with name %s (resolved to %s). %d elements were found.
 radio_is_checked_failure = The radio button with name or id %s is not selected and should be.
@@ -172,12 +169,10 @@ select_option_by_index_failure = The option in the select %s with index of %d wa
 select_option_by_value_failure = The option in the select %s with value of "%s" was not found or can't be selected.
 select_option_by_text_failure = The option in the select %s with text of "%s" was not found or can't be selected.
 
-textbox_contains_text_failure = The textbox with name or id %s should contain "%s", but it's current text is "%s".
-textbox_does_not_contain_text_failure = The textbox with name or id %s shouldn't contain "%s", but it's current text is "%s".
-textbox_matches_text_failure = The textbox with name or id %s should match "%s", but it's current text is "%s".
-textbox_does_not_match_text_failure = The textbox with name or id %s shouldn't match "%s", but it's current text is "%s".
 textbox_is_empty_failure = The textbox with name or id %s is not empty.
 textbox_is_not_empty_failure = The textbox with name or id %s is empty.
+
+table_invalid_data_failure = The table with name or id %s should have structure of \n%s\n%s but was \n%s.
 
 timeout_failure = The action wait for page to load timed out after waiting for %d ms.
 

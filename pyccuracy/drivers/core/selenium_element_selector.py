@@ -42,7 +42,7 @@ class SeleniumElementSelector(object):
         if  SeleniumElementSelector.is_xpath_name:
         	return element_name
         '''
-        Returns a regular expression that matches input type="button", input type="submit" or button tags with
+        Returns an xpath that matches input type="button", input type="submit" or button tags with
         the specified argument as id or name.
         '''
         return r"//input[(@name='%s' or @id='%s') and (@type='button' or @type='submit')] | //button[@name='%s' or @id='%s']" % (element_name, element_name, element_name, element_name)
@@ -52,7 +52,7 @@ class SeleniumElementSelector(object):
         if  SeleniumElementSelector.is_xpath_name:
         	return element_name
         '''
-        Returns a regular expression that matches input type="radio" with the specified argument as id or name.
+        Returns an xpath that matches input type="radio" with the specified argument as id or name.
         '''
         return r"//input[(@name='%s' or @id='%s') and @type='radio']" % (element_name, element_name)
 
@@ -61,7 +61,7 @@ class SeleniumElementSelector(object):
         if  SeleniumElementSelector.is_xpath_name:
         	return element_name
         '''
-        Returns a regular expression that matches div tags with
+        Returns an xpath that matches div tags with
         the specified argument as id or name.
         '''
         return r"//div[(@name='%s' or @id='%s')]" % (element_name, element_name)
@@ -71,17 +71,17 @@ class SeleniumElementSelector(object):
         if  SeleniumElementSelector.is_xpath_name:
         	return element_name
         '''
-        Returns a regular expression that matches link(a) tags with
+        Returns an xpath that matches link(a) tags with
         the specified argument as id or name.
         '''
-        return r"//a[(@name='%s' or @id='%s')]" % (element_name, element_name)
-
+        return r"//a[(@name='%s' or @id='%s' or contains(., '%s'))]" % \
+                            (element_name, element_name, element_name)
     @staticmethod
     def checkbox(element_name):
         if  SeleniumElementSelector.is_xpath_name:
         	return element_name
         '''
-        Returns a regular expression that matches input type="checkbox" tags with
+        Returns an xpath that matches input type="checkbox" tags with
         the specified argument as id or name.
         '''
         return r"//input[(@name='%s' or @id='%s') and @type='checkbox']" % (element_name, element_name)
@@ -91,7 +91,7 @@ class SeleniumElementSelector(object):
         if  SeleniumElementSelector.is_xpath_name:
         	return element_name
         '''
-        Returns a regular expression that matches Select tags with
+        Returns an xpath that matches Select tags with
         the specified argument as id or name.
         '''
         return r"//select[@name='%s' or @id='%s']" % (element_name, element_name)
@@ -101,7 +101,7 @@ class SeleniumElementSelector(object):
         if  SeleniumElementSelector.is_xpath_name:
         	return element_name
         '''
-        Returns a regular expression that matches input type="text", input without type attribute or textarea tags with
+        Returns an xpath that matches input type="text", input without type attribute or textarea tags with
         the specified argument as id or name.
         '''
         return r"//input[(@name='%s' or @id='%s') and (@type='text' or @type='password' or not(@type))] | //textarea[@name='%s' or @id='%s']" % (element_name, element_name, element_name, element_name)
@@ -111,7 +111,15 @@ class SeleniumElementSelector(object):
         if  SeleniumElementSelector.is_xpath_name:
         	return element_name
         '''
-        Returns a regular expression that matches img tags with
+        Returns an xpath that matches img tags with
         the specified argument as id or name.
         '''
         return r"//img[@name='%s' or @id='%s']" % (element_name, element_name)
+
+    @staticmethod
+    def table(element_name):
+        '''
+        Returns an xpath that matches table tags with
+        the specified argument as id or name.
+        '''
+        return r"//table[@name='%s' or @id='%s']" % (element_name, element_name)

@@ -15,8 +15,11 @@ compile_log_file=${build_dir}/compile.log
 unit_log_file=${build_dir}/unit.log
 functional_log_file=${build_dir}/functional.log
 
+browser="firefox"
+pattern="*"
+
 help:
-	@echo "Please use \`make <target>' where <target> is one of"
+	@echo "Please use 'make <target>' where <target> is one of"
 	@echo "  all         to run a complete build"
 	@echo "  clean       to clear the build dir"
 	@echo "  compile     to compile all python files"
@@ -97,8 +100,8 @@ acceptance:
 	@echo "Starting tests..."
 	@echo "================="
 
-	@PYTHONPATH=`pwd`/pyccuracy/:$$PYTHONPATH python pyccuracy/pyccuracy_console.py -d ${root_dir}/tests/acceptance/action_tests/ -p "*en-us.acc" -l en-us -v 0
-	@PYTHONPATH=`pwd`/pyccuracy/:$$PYTHONPATH python pyccuracy/pyccuracy_console.py -d ${root_dir}/tests/acceptance/action_tests/ -p "*pt-br.acc" -l pt-br -v 0
+	@PYTHONPATH=`pwd`/pyccuracy/:$$PYTHONPATH python pyccuracy/pyccuracy_console.py -d ${root_dir}/tests/acceptance/action_tests/ -p "${pattern}en-us.acc" -l en-us -v 3 -b ${browser}
+	@PYTHONPATH=`pwd`/pyccuracy/:$$PYTHONPATH python pyccuracy/pyccuracy_console.py -d ${root_dir}/tests/acceptance/action_tests/ -p "${pattern}pt-br.acc" -l pt-br -v 3 -b ${browser}
 	@-make selenium_down
 
 dist: clean
@@ -112,11 +115,12 @@ upload: clean
 	@echo "Build finished successfully and uploaded!"
 
 docs:
-	@$(MAKE) -C ./docs -f Makefile clean
-	@$(MAKE) -C ./docs -f Makefile html
-	tar -cf ./docs/current_docs.tar ./docs/build/html/*
+	@python pyccuracy/actions/core/__init__.py > actions_reference.textile
+	@echo -e "\nFile 'actions_reference.textile' was generated.\n"
+	@echo -e "Don't forget to update http://wiki.github.com/heynemann/pyccuracy/actions-reference.\n"
 
 deb:
 	mv .git /tmp/pyccuracy_git
-	python -c 'import os;os.system("debuild")'
+	python -c 'import os;os.system("debuild -tc")'
 	mv /tmp/pyccuracy_git .git
+	mv ../python-pyccuracy_*.deb ./releases

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
-
-from nose.tools import assert_equals
 from pyccuracy import PageRegistry, Page
+from pyccuracy.page import ElementAlreadyRegisteredError
 
 class GoogleMainPage(Page):
     url = 'http://google.com'
@@ -40,5 +39,34 @@ def test_quick_register_registers_element_within_dict():
     p = GloboPortal()
     expected_xpath = "//div[contains(concat(' ', normalize-space(@class), ' '), ' marca-globo ')]/a"
     assert p.registered_elements.has_key('logo')
-    assert_equals(p.registered_elements['logo'], expected_xpath)
+    assert p.registered_elements['logo'] == expected_xpath
 
+def test_should_not_allow_registering_two_elements_with_same_name():
+    class GloboPortal(Page):
+        url = 'http://globo.com'
+        def register(self):
+            self.register_element('my div', u"//div[1]")
+            self.register_element('my div', u"//div[2]")
+
+    try:
+        p = GloboPortal()
+        assert False, "Should not get here."
+    except ElementAlreadyRegisteredError, e:
+        pass
+
+def test_should_allow_registering_two_elements_with_same_name_in_different_pages():
+    class GloboPortal(Page):
+        url = 'http://globo.com'
+        def register(self):
+            self.register_element('my div', u"//div[1]")
+
+    class YahooPortal(Page):
+        url = 'http://yahoo.com'
+        def register(self):
+            self.register_element('my div', u"//div[1]")
+
+    try:
+        g = GloboPortal()
+        y = YahooPortal()
+    except ElementAlreadyRegisteredError, e:
+        assert False, "Should not get here."

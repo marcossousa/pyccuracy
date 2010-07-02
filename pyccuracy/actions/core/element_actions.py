@@ -12,6 +12,44 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+u'''
+Element actions can be used for any registered element (more about registering elements at "[[Creating custom Pages]]" section). The majority of Pyccuracy's actions are in this category, like clicking elements or verifying that they contain a given style.
+
+Whenever you see element_name, it means the name of the registered element or the attribute "name" or "id" of the given element.
+
+Whenever you see [element_type|element_selector] what this means is that you have to use one of the following:
+
+h3. en-us:
+  * button
+  * radio button
+  * div 
+  * link 
+  * checkbox 
+  * select 
+  * textbox 
+  * image 
+  * paragraph 
+  * ul 
+  * li
+  * table
+  * element (only use this if none of the above apply)
+
+h3. pt-br:
+  * botão 
+  * radio 
+  * div 
+  * link 
+  * checkbox 
+  * select 
+  * caixa de texto 
+  * imagem 
+  * parágrafo 
+  * ul 
+  * li
+  * tabela
+  * elemento (só utilize este se nenhum dos outro se aplicar)
+  '''
+
 from pyccuracy.page import PageRegistry, Page
 from pyccuracy.actions import ActionBase
 from pyccuracy.languages import LanguageItem
@@ -29,7 +67,15 @@ def resolve_element_key(context, element_type, element_name, resolve_function):
     return resolve_function(context, element_category, element_name)
 
 class ElementDoesNotContainStyleAction(ActionBase):
-    '''Ensure that a specific element does not contain some style.'''
+    '''h3. Examples
+
+  * And I see "some" textbox does not have "width" style
+  * And I see "other" button does not have "visible" style
+
+h3. Description
+
+This action asserts that the given element does not have the given style with any value.'''
+    __builtin__ = True
     regex = LanguageItem('element_does_not_contain_style_regex')
 
     def execute(self, context, element_type, element_name, style_name):
@@ -46,7 +92,15 @@ class ElementDoesNotContainStyleAction(ActionBase):
             raise self.failed(error_message)
 
 class ElementContainsStyleAction(ActionBase):
-    '''Ensure that a specific element contains some style.'''
+    '''h3. Examples
+
+  * And I see "some" textbox has "width" style
+  * And I see "other" button has "visible" style
+
+h3. Description
+
+This action asserts that the given element has the given style with any value.'''
+    __builtin__ = True
     regex = LanguageItem('element_contains_style_regex')
 
     def execute(self, context, element_type, element_name, style_name):
@@ -63,7 +117,15 @@ class ElementContainsStyleAction(ActionBase):
             raise self.failed(error_message)
 
 class ElementClickAction(ActionBase):
-    '''Clicks on a specific element.'''
+    '''h3. Examples
+
+  * And I click "some" button
+  * And I click "other" checkbox and wait
+
+h3. Description
+
+This action instructs the browser driver to click the given element. If the "and wait" suffix is used, a "Wait for page to load" action is executed after this one.'''
+    __builtin__ = True
     regex = LanguageItem('element_click_regex')
 
     def execute(self, context, element_type, element_name, should_wait):
@@ -84,7 +146,15 @@ class ElementClickAction(ActionBase):
                     raise
 
 class ElementIsVisibleAction(ActionBase):
-    '''Asserts that a specific element is visible.'''
+    '''h3. Examples
+
+  * And I see "some" button
+  * And I see "other" checkbox
+
+h3. Description
+
+This action asserts that the given element is visible.'''
+    __builtin__ = True
     regex = LanguageItem('element_is_visible_regex')
 
     def execute(self, context, element_type, element_name):
@@ -94,7 +164,15 @@ class ElementIsVisibleAction(ActionBase):
         self.assert_element_is_visible(context, element_key, error_message)
 
 class ElementIsNotVisibleAction(ActionBase):
-    '''Asserts that a specific element is not visible.'''
+    '''h3. Examples
+
+  * And I do not see "some" button
+  * And I do not see "other" checkbox
+
+h3. Description
+
+This action asserts that the given element is not visible.'''
+    __builtin__ = True
     regex = LanguageItem('element_is_not_visible_regex')
 
     def execute(self, context, element_type, element_name):
@@ -104,7 +182,15 @@ class ElementIsNotVisibleAction(ActionBase):
         self.assert_element_is_not_visible(context, element_key, error_message)
 
 class ElementIsEnabledAction(ActionBase):
-    '''Asserts that a specific element is enabled.'''
+    '''h3. Examples
+
+  * And I see "some" button is enabled
+  * And I see "other" textbox is enabled
+
+h3. Description
+
+This action asserts that the given element is enabled.'''
+    __builtin__ = True
     regex = LanguageItem('element_is_enabled_regex')
 
     def execute(self, context, element_type, element_name):
@@ -118,7 +204,15 @@ class ElementIsEnabledAction(ActionBase):
             raise self.failed(error_message)
 
 class ElementIsDisabledAction(ActionBase):
-    '''Asserts that a specific element is disabled.'''
+    '''h3. Examples
+
+  * And I see "some" button is disabled
+  * And I see "other" textbox is disabled
+
+h3. Description
+
+This action asserts that the given element is disabled.'''
+    __builtin__ = True
     regex = LanguageItem('element_is_disabled_regex')
 
     def execute(self, context, element_type, element_name):
@@ -132,7 +226,18 @@ class ElementIsDisabledAction(ActionBase):
             raise self.failed(error_message)
 
 class ElementWaitForPresenceAction(ActionBase):
-    '''Waits until a given element appears or times out.'''
+    '''h3. Examples
+
+  * And I wait for "some" button element to be present
+  * And I wait for "other" textbox element to be present for 5 seconds
+
+h3. Description
+
+Waits until a given element appears or times out.
+
+This action is really useful when you have some processing done (maybe AJAX) before an element is dynamically created.
+'''
+    __builtin__ = True
     regex = LanguageItem("element_wait_for_presence_regex")
 
     def execute(self, context, element_type, element_name, timeout):
@@ -147,7 +252,18 @@ class ElementWaitForPresenceAction(ActionBase):
             raise self.failed(error_message)
 
 class ElementWaitForDisappearAction(ActionBase):
-    '''Waits until a given element disappears (or is not visible already) or times out.'''
+    '''h3. Examples
+
+  * And I wait for "some" button element to disappear
+  * And I wait for "other" textbox element to disappear for 5 seconds
+
+h3. Description
+
+Waits until a given element disappears (or is not visible already) or times out.
+
+This action is really useful when you have some processing done (maybe AJAX) before an element is dynamically removed or hidden.
+    '''
+    __builtin__ = True
     regex = LanguageItem("element_wait_for_disappear_regex")
 
     def execute(self, context, element_type, element_name, timeout):
@@ -162,6 +278,14 @@ class ElementWaitForDisappearAction(ActionBase):
             raise self.failed(error_message)
 
 class ElementDragAction(ActionBase):
+    '''h3. Example
+
+  * I drag the "from" div to the "target" div
+
+h3. Description
+
+This action instructs the browser driver to drag the "from" element to the "target" element.'''
+    __builtin__ = True
     regex = LanguageItem("element_drag_drop_regex")
 
     def execute(self, context, from_element_type, from_element_name, to_element_type, to_element_name):
@@ -175,6 +299,14 @@ class ElementDragAction(ActionBase):
         context.browser_driver.drag_element(from_element_key, to_element_key)
 
 class ElementContainsTextAction(ActionBase):
+    '''h3. Example
+
+  * I see "username" textbox contains "polo"
+
+h3. Description
+
+This action asserts that the text for the given element contains the specified one.'''
+    __builtin__ = True
     regex = LanguageItem("element_contains_text_regex")
 
     def execute(self, context, element_type, element_name, text):
@@ -189,6 +321,14 @@ class ElementContainsTextAction(ActionBase):
             raise self.failed(error_message)
 
 class ElementDoesNotContainTextAction(ActionBase):
+    '''h3. Example
+
+  * I see "username" textbox does not contain "polo"
+
+h3. Description
+
+This action asserts that the text for the given element does not contain the specified one.'''
+    __builtin__ = True
     regex = LanguageItem("element_does_not_contain_text_regex")
 
     def execute(self, context, element_type, element_name, text):
@@ -203,6 +343,14 @@ class ElementDoesNotContainTextAction(ActionBase):
             raise self.failed(error_message)
 
 class ElementMatchesTextAction(ActionBase):
+    '''h3. Example
+
+  * I see "username" textbox matches "polo"
+
+h3. Description
+
+This action asserts that the text for the given element matches exactly the specified one.'''
+    __builtin__ = True
     regex = LanguageItem("element_matches_text_regex")
 
     def execute(self, context, element_type, element_name, text):
@@ -217,6 +365,14 @@ class ElementMatchesTextAction(ActionBase):
             raise self.failed(error_message)
 
 class ElementDoesNotMatchTextAction(ActionBase):
+    '''h3. Example
+
+  * I see "username" textbox matches "polo"
+
+h3. Description
+
+This action asserts that the text for the given element does not match exactly the specified one.'''
+    __builtin__ = True
     regex = LanguageItem("element_does_not_match_text_regex")
 
     def execute(self, context, element_type, element_name, text):
@@ -231,6 +387,14 @@ class ElementDoesNotMatchTextAction(ActionBase):
             raise self.failed(error_message)
 
 class ElementContainsMarkupAction(ActionBase):
+    '''h3. Example
+
+  * I see "username" textbox contains "&lt;p&gt;polo&lt;/p&gt;" markup
+
+h3. Description
+
+This action asserts that the markup for the given element contains the specified one.'''
+    __builtin__ = True
     regex = LanguageItem("element_contains_markup_regex")
 
     def execute(self, context, element_type, element_name, markup):
@@ -245,6 +409,14 @@ class ElementContainsMarkupAction(ActionBase):
             raise self.failed(error_message)
 
 class ElementDoesNotContainMarkupAction(ActionBase):
+    '''h3. Example
+
+  * I see "username" textbox does not contain "&lt;p&gt;polo&lt;/p&gt;" markup
+
+h3. Description
+
+This action asserts that the markup for the given element does not contain the specified one.'''
+    __builtin__ = True
     regex = LanguageItem("element_does_not_contain_markup_regex")
 
     def execute(self, context, element_type, element_name, markup):
@@ -259,6 +431,14 @@ class ElementDoesNotContainMarkupAction(ActionBase):
             raise self.failed(error_message)
 
 class ElementMatchesMarkupAction(ActionBase):
+    '''h3. Example
+
+  * I see "username" textbox matches "&lt;p&gt;polo&lt;/p&gt;" markup
+
+h3. Description
+
+This action asserts that the markup for the given element matches exactly the specified one.'''
+    __builtin__ = True
     regex = LanguageItem("element_matches_markup_regex")
 
     def execute(self, context, element_type, element_name, markup):
@@ -273,6 +453,14 @@ class ElementMatchesMarkupAction(ActionBase):
             raise self.failed(error_message)
 
 class ElementDoesNotMatchMarkupAction(ActionBase):
+    '''h3. Example
+
+  * I see "username" textbox does not match "&lt;p&gt;polo&lt;/p&gt;" markup
+
+h3. Description
+
+This action asserts that the markup for the given element does not match exactly the specified one.'''
+    __builtin__ = True
     regex = LanguageItem("element_does_not_match_markup_regex")
 
     def execute(self, context, element_type, element_name, markup):
@@ -287,6 +475,14 @@ class ElementDoesNotMatchMarkupAction(ActionBase):
             raise self.failed(error_message)
 
 class ElementMouseoverAction(ActionBase):
+    '''h3. Example
+
+  * And I mouseover "some" image
+
+h3. Description
+
+This action instructs the browser driver to mouse over the specified element.'''
+    __builtin__ = True
     regex = LanguageItem("element_mouseover_regex")
 
     def execute(self, context, element_type, element_name):
@@ -297,6 +493,14 @@ class ElementMouseoverAction(ActionBase):
         context.browser_driver.mouseover_element(element_key)
 
 class ElementMouseOutAction(ActionBase):
+    '''h3. Example
+
+  * And I mouseout "some" image
+
+h3. Description
+
+This action instructs the browser driver to remove mouse focus from the specified element.'''
+    __builtin__ = True
     regex = LanguageItem("element_mouseout_regex")
 
     def execute(self, context, element_type, element_name):
@@ -305,4 +509,3 @@ class ElementMouseOutAction(ActionBase):
         error_message = context.language.format("element_is_visible_failure", element_type, element_name)
         self.assert_element_is_visible(context, element_key, error_message)
         context.browser_driver.mouseout_element(element_key)
-

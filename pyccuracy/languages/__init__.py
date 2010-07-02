@@ -22,14 +22,14 @@ from os.path import abspath, dirname, join
 
 from pyccuracy.errors import WrongArgumentsError
 
-AVAILABLE_LANGUAGES = [l.replace('.txt', '') for l in listdir(join(abspath(dirname(__file__)), 'data'))]
+AVAILABLE_LANGUAGES = [l.replace('.txt', '') for l in listdir(join(abspath(dirname(__file__)), 'data')) if l.endswith('txt')]
 
 class Singleton(object):
     __SINGLETON_INSTANCES__ = {}
     def __new__(cls, *args, **kw):
         key = cls.__name__, args, tuple(kw.values())
         if key not in cls.__SINGLETON_INSTANCES__.keys():
-            cls.__SINGLETON_INSTANCES__[key] = super(type, cls).__new__(cls, *args, **kw)
+            cls.__SINGLETON_INSTANCES__[key] = super(type, cls).__new__(cls)
  
         return cls.__SINGLETON_INSTANCES__[key]
 
@@ -40,6 +40,7 @@ class LanguageGetter(Singleton):
                     'parameter, got %r(%r)'
             raise TypeError(error % (language.__class__, language))
 
+        self.key = language
         self.curdir = abspath(dirname(__file__))
         self.language_path = join(self.curdir, 'data', '%s.txt' % language)
         self.raw_data = None
@@ -55,7 +56,9 @@ class LanguageGetter(Singleton):
             if '=' not in line:
                 continue
 
-            k, v = line.split('=')
+            values = line.split('=')
+            k = values[0]
+            v = "=".join(values[1:])
             self.data[k.strip()] = unicode(v.strip())
 
     def get(self, key):
